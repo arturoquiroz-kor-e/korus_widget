@@ -15,4 +15,11 @@ DEST="$CHAT/src/main/resources/static/widget/v1"
 
 mkdir -p "$DEST"
 cp "$HERE/dist/widget.js" "$DEST/widget.js"
-echo "widget.js → $DEST (reinicia korus_chat si no recarga estáticos)"
+echo "widget.js → $DEST"
+
+# Con spring-boot:run los estáticos se leen de target/classes: copiar ahí
+# también hace que korus_chat lo sirva sin reiniciar.
+LIVE="$CHAT/target/classes/static/widget/v1"
+if [[ -d "$CHAT/target/classes" ]]; then
+  mkdir -p "$LIVE" && cp "$HERE/dist/widget.js" "$LIVE/widget.js" && echo "widget.js → $LIVE (en vivo)"
+fi

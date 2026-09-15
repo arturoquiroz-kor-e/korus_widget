@@ -379,7 +379,12 @@ input { font: inherit; }
 }
 
 /* Modo page (pantalla completa) e inline (llena su contenedor) */
-.mode-page .panel { position: fixed; inset: 0; }
+.mode-page .panel {
+  position: fixed; inset: 0;
+  /* En escritorio una columna legible; en móvil todo el ancho */
+  max-width: 760px; margin: 0 auto;
+  border-left: 1px solid var(--kc-border); border-right: 1px solid var(--kc-border);
+}
 .mode-inline .panel { position: relative; width: 100%; height: 100%; min-height: 420px; border: 1px solid var(--kc-border); border-radius: 12px; overflow: hidden; }
 
 .panel { display: flex; flex-direction: column; background: var(--kc-bg); }

@@ -1,6 +1,6 @@
 # Contexto — korus-widget
 
-> Última actualización: 2026-09-15 · **W0 y W1 hechos. Siguiente: W2 (auto-montaje por `<script>`, `/w/`).**
+> Última actualización: 2026-09-15 · **W0–W2 hechos. Siguiente: W3 (preview por token, tema, teclado) junto con P3 del panel.**
 
 ## Qué es esto
 
@@ -31,6 +31,13 @@ contra `korus_chat` real), `dev/deploy-local.sh`.
   number con reintentos, sensible enmascarado en storage, lista de 3 páginas
   con avance/retroceso, decisión, opciones y POST. 17 aserciones más
   (`e2e/demo.mjs`).
+- **W2** terminado el 2026-09-15: auto-montaje leyendo `data-*` del propio
+  `<script>` (`data-site-key`, `-mode`, `-token`, `-context`, `-color`,
+  `-position`, `-open`, `-base-url`), `baseUrl` deducido del `src`, `data-token`
+  resuelto por ruta con puntos en `window` en cada llamada, modo `page` con
+  columna de 760 px centrada, y la página hospedada `/w/{siteKey}` de
+  `korus_chat` probada con el build real (incluida key inexistente → widget
+  pinta `unauthorized`). 15 aserciones (`e2e/embed.mjs`).
 - Tamaño: 33 KB gzip (tope 60).
 
 ## Decisiones (append-only, con el porqué)
@@ -54,8 +61,6 @@ contra `korus_chat` real), `dev/deploy-local.sh`.
 
 ## Pendientes
 
-- [ ] W2: auto-montaje leyendo `data-*` del `<script>`, `data-mode="page"`
-      para `/w/{siteKey}`, `dev/deploy-local.sh` probado con la página hospedada.
 - [ ] W3: preview por token (`preview-expired`), tema por atributos, teclado,
       móvil, e2e de `text` y `list` con un fixture sin servicios.
 - [ ] Acordar con back el Dockerfile de `korus_chat` (clonar este repo en
@@ -77,5 +82,13 @@ contra `korus_chat` real), `dev/deploy-local.sh`.
   navegador y cae en la sonda a `/health`.
 - **Playwright atraviesa el Shadow DOM** con los locators normales; no hace
   falta `>>>`.
+- **`dev/deploy-local.sh` copia también a `target/classes`**: con
+  `spring-boot:run` los estáticos se sirven desde ahí, y así korus_chat sirve
+  el build nuevo sin reiniciar.
+- **Con el snippet en una página que no es de korus_chat, `baseUrl` deducido
+  apunta a esa página.** Es lo correcto en producción (el script siempre viene
+  de korus_chat); en pruebas se fuerza con `data-base-url`.
+- **`data-context` solo viaja al iniciar.** Si hay conversación guardada, se
+  restaura por `GET` y el contexto no se manda.
 - **`options` es una propiedad, no un atributo**: `el.options = {...}` antes de
   insertar el elemento. Funciones (`getToken`) no viajan por atributos.

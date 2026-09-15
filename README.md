@@ -10,9 +10,20 @@ Contrato del gateway: `korus/docs/chat-widget-api.md`.
 ## Uso
 
 ```html
-<!-- Embebido (auto-montaje, bloque W2) -->
-<script src="https://korus-chat.onrender.com/widget/v1/widget.js" data-site-key="kor_site_..." async></script>
+<!-- Embebido: se monta solo al cargar -->
+<script src="https://korus-chat.onrender.com/widget/v1/widget.js"
+        data-site-key="kor_site_..."
+        data-token="miApp.getKorusToken"   <!-- opcional: función global que devuelve el token del usuario; se llama en cada turno -->
+        data-mode="bubble"                 <!-- bubble (default) | page | inline -->
+        data-position="right"              <!-- right | left -->
+        data-color="#d4922a"
+        data-open="false"
+        data-context='{"pagina":"/inicio"}'
+        async></script>
 ```
+`baseUrl` se deduce del `src` del script; `data-base-url` lo fuerza. La página
+hospedada `https://korus-chat.onrender.com/w/{siteKey}` usa este mismo script
+con `data-mode="page"`.
 
 ```js
 // Montaje por API
@@ -52,4 +63,5 @@ dev/seed-bot.sh "Tenant Prueba" easytrip dev/flows/easytrip-tag.json       http:
 dev/seed-bot.sh "Tenant Prueba" demo     dev/flows/demo-capture-list.json  http://localhost:5177 http://localhost:8084
 SITE_KEY=... npm run e2e                 # recorrido easytrip
 DEMO_SITE_KEY=... node e2e/demo.mjs      # recorrido demo (text, list, paginación)
+node e2e/embed.mjs                       # snippet <script data-*>, data-token/context, /w/{siteKey} real
 ```

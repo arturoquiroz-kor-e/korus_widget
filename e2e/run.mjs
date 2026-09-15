@@ -115,7 +115,7 @@ check('site key inválida → fatal "no disponible"', await page.evaluate(() => 
 await page.goto(`${HOST}/host.html?siteKey=${SITE_KEY}&mode=page`)
 await w('.choice').first().waitFor()
 const box = await w('.panel').boundingBox()
-check('modo page ocupa la ventana, sin burbuja', box.width === 1100 && box.height === 800 && (await w('.bubble').count()) === 0)
+check('modo page: columna 760 centrada a toda la altura, sin burbuja', box.width === 760 && box.height === 800 && (await w('.bubble').count()) === 0)
 await page.screenshot({ path: OUT + '/05-page.png' })
 
 console.log(`\n${failed ? failed + ' fallos' : 'todo en verde'} · errores de página: ${errors.length ? errors.join(' | ') : 'ninguno'}`)

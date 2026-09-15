@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>Portal con snippet</title>
+<script>
+  // Lo que un portal real expondría: una función global que devuelve el token del usuario
+  window.portal = { getKorusToken: () => 'token-del-portal-123' }
+</script>
+</head>
+<body>
+  <h1>Portal del tenant — snippet tal cual lo pega el integrador</h1>
+  <script id="snippet"></script>
+  <script>
+    // El e2e arma el snippet con la site key y atributos que reciba por query,
+    // exactamente como lo pegaría el tenant (script async con data-*)
+    const p = new URLSearchParams(location.search)
+    const s = document.createElement('script')
+    s.src = '/widget.js'; s.async = true
+    s.dataset.siteKey = p.get('siteKey')
+    s.dataset.baseUrl = 'http://localhost:8084'   // aquí el script no viene de korus_chat; en /w/ sí y no hace falta
+    for (const k of ['mode', 'token', 'color', 'position', 'open', 'context']) if (p.get(k)) s.dataset[k] = p.get(k)
+    document.body.appendChild(s)
+  </script>
+</body>
+</html>
