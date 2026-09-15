@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>korus-widget · dev</title>
+  <style>body { font-family: system-ui; padding: 24px; } input { width: 360px; }</style>
+</head>
+<body>
+  <h2>Widget de Korus Chat — dev</h2>
+  <p>
+    Site key: <input id="key" placeholder="kor_site_..." />
+    <button id="go">Montar</button>
+    <small>(el origen http://localhost:5175 tiene que estar en la site key)</small>
+  </p>
+  <script type="module">
+    import KorusChat from '/src/main.js'
+    document.getElementById('go').onclick = () => {
+      KorusChat.mount(null, { baseUrl: 'http://localhost:8084', siteKey: document.getElementById('key').value.trim(), openOnLoad: true })
+    }
+  </script>
+</body>
+</html>
