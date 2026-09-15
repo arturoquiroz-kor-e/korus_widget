@@ -1,6 +1,6 @@
 # Contexto — korus-widget
 
-> Última actualización: 2026-09-15 · **W0–W2 hechos. Siguiente: W3 (preview por token, tema, teclado) junto con P3 del panel.**
+> Última actualización: 2026-09-15 · **W0–W2 hechos y W3 casi: falta el e2e del preview (bloqueado por `PANEL_BASE_URL` local) y el remoto en GitHub.**
 
 ## Qué es esto
 
@@ -61,10 +61,13 @@ contra `korus_chat` real), `dev/deploy-local.sh`.
 
 ## Pendientes
 
-- [ ] W3: preview por token (`preview-expired`), tema por atributos, teclado,
-      móvil, e2e de `text` y `list` con un fixture sin servicios.
-- [ ] Acordar con back el Dockerfile de `korus_chat` (clonar este repo en
-      `WIDGET_REF`) y borrar su placeholder `korus_chat/widget/`.
+- [ ] W3: el modo preview está implementado (`previewToken` →
+      `X-Preview-Token`, evento `preview-expired`, sin persistencia) y el
+      panel lo monta desde `PreviewDrawer`; falta el e2e de punta a punta
+      (korus_chat local tiene que aceptar el origen del panel, `:5174`) y
+      probar `preview_expired` real (15 min).
+- [ ] Remoto en GitHub `arturoquiroz-kor-e/korus_widget` (lo crea Arthur) y
+      push; es lo que clona el Dockerfile de korus_chat.
 
 ## Trampas
 
