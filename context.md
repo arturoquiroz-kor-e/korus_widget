@@ -1,6 +1,6 @@
 # Contexto — korus-widget
 
-> Última actualización: 2026-09-15 · **W0–W2 hechos y W3 casi: falta el e2e del preview (bloqueado por `PANEL_BASE_URL` local) y el remoto en GitHub.**
+> Última actualización: 2026-09-15 · **W0–W3 hechos. Falta el remoto en GitHub y el deploy.**
 
 ## Qué es esto
 
@@ -38,6 +38,11 @@ contra `korus_chat` real), `dev/deploy-local.sh`.
   columna de 760 px centrada, y la página hospedada `/w/{siteKey}` de
   `korus_chat` probada con el build real (incluida key inexistente → widget
   pinta `unauthorized`). 15 aserciones (`e2e/embed.mjs`).
+- **W3** cerrado el 2026-09-15: modo preview verificado de punta a punta desde
+  el panel (`PreviewDrawer` de korus-frontend monta el widget con
+  `X-Preview-Token`, cuenta atrás, reinicio con token de usuario; las
+  conversaciones quedan `preview: true`). Esc cierra el flotante; `inline`
+  llena su contenedor.
 - Tamaño: 33 KB gzip (tope 60).
 
 ## Decisiones (append-only, con el porqué)
@@ -61,11 +66,8 @@ contra `korus_chat` real), `dev/deploy-local.sh`.
 
 ## Pendientes
 
-- [ ] W3: el modo preview está implementado (`previewToken` →
-      `X-Preview-Token`, evento `preview-expired`, sin persistencia) y el
-      panel lo monta desde `PreviewDrawer`; falta el e2e de punta a punta
-      (korus_chat local tiene que aceptar el origen del panel, `:5174`) y
-      probar `preview_expired` real (15 min).
+- [ ] `preview_expired` real: probado solo el camino del evento; el token
+      dura 15 min y no hay TTL corto en local.
 - [ ] Remoto en GitHub `arturoquiroz-kor-e/korus_widget` (lo crea Arthur) y
       push; es lo que clona el Dockerfile de korus_chat.
 
