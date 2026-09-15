@@ -13,7 +13,7 @@
       <span v-else class="bubble-icon">✕</span>
     </button>
 
-    <section v-show="open || mode !== 'bubble'" class="panel" role="dialog" :aria-label="botName || 'Chat'">
+    <section v-show="open || mode !== 'bubble'" class="panel" role="dialog" :aria-label="botName || 'Chat'" @keydown.esc="onEsc">
       <header class="head">
         <div class="head-title">
           <span class="head-name">{{ botName || '…' }}</span>
@@ -310,6 +310,11 @@ function toggle() {
   open.value = !open.value
 }
 
+// Esc cierra el flotante (en page/inline no hay nada que cerrar)
+function onEsc() {
+  if (mode === 'bubble') open.value = false
+}
+
 function scrollToEnd() {
   nextTick(() => {
     if (logRef.value) logRef.value.scrollTop = logRef.value.scrollHeight
@@ -385,6 +390,7 @@ input { font: inherit; }
   max-width: 760px; margin: 0 auto;
   border-left: 1px solid var(--kc-border); border-right: 1px solid var(--kc-border);
 }
+.kc.mode-inline { height: 100%; }
 .mode-inline .panel { position: relative; width: 100%; height: 100%; min-height: 420px; border: 1px solid var(--kc-border); border-radius: 12px; overflow: hidden; }
 
 .panel { display: flex; flex-direction: column; background: var(--kc-bg); }
