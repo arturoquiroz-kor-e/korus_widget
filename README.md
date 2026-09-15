@@ -37,10 +37,19 @@ npm install
 npm run dev          # http://localhost:5175 — pide una site key con ese origen
 npm run build        # dist/widget.js
 dev/deploy-local.sh  # lo copia a ../korus_chat para probar /w/{siteKey}
-SITE_KEY=kor_site_... npm run e2e   # Playwright contra korus_chat en :8084
+SITE_KEY=kor_site_... npm run e2e   # Playwright contra korus_chat en :8084 (ver abajo)
 ```
 
 Los e2e sirven `e2e/pages/host.html` (un portal con CSS hostil a propósito)
-en `:5175` y un origen no registrado en `:5176`. Necesitan Chrome instalado y
-`korus_chat` corriendo con un bot sembrado (`dev/seed-bot.sh` de korus_chat,
-con `http://localhost:5175` entre los orígenes).
+en `:5177` y un origen no registrado en `:5178` (puertos distintos del dev
+server para poder correrlos con él abierto). Necesitan Chrome instalado y
+`korus_chat` corriendo con los bots sembrados con `http://localhost:5177`
+entre los orígenes:
+
+```bash
+# en korus_chat, con CHAT_CONNECTOR=http y perfil local
+dev/seed-bot.sh "Tenant Prueba" easytrip dev/flows/easytrip-tag.json       http://localhost:5177 http://localhost:8084
+dev/seed-bot.sh "Tenant Prueba" demo     dev/flows/demo-capture-list.json  http://localhost:5177 http://localhost:8084
+SITE_KEY=... npm run e2e                 # recorrido easytrip
+DEMO_SITE_KEY=... node e2e/demo.mjs      # recorrido demo (text, list, paginación)
+```

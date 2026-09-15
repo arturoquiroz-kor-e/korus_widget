@@ -25,9 +25,12 @@ contra `korus_chat` real), `dev/deploy-local.sh`.
   F5 por `GET`, terminar por el usuario, reintento con el mismo `turnId`,
   `getToken` en cada llamada, origen ajeno, site key inválida, modo `page`,
   aislamiento de CSS con un portal hostil. 26 aserciones.
-- Sin probar con datos reales: prompts `text` y `list` (el flujo local no
-  llega a ellos porque el conector es `log`; están implementados según el
-  contrato). Pendiente un fixture sin servicios en `korus_chat/dev/flows/`.
+- `text` y `list` probados con datos reales contra el bot `demo`
+  (`korus_chat/dev/flows/demo-capture-list.json` + back simulado
+  `/dev/mock/**` del perfil `local`, conector HTTP real): capture text/email/
+  number con reintentos, sensible enmascarado en storage, lista de 3 páginas
+  con avance/retroceso, decisión, opciones y POST. 17 aserciones más
+  (`e2e/demo.mjs`).
 - Tamaño: 33 KB gzip (tope 60).
 
 ## Decisiones (append-only, con el porqué)
@@ -60,13 +63,18 @@ contra `korus_chat` real), `dev/deploy-local.sh`.
 
 ## Trampas
 
-- **Los e2e necesitan una site key con `http://localhost:5175`.** El `:5173`
-  suele estar ocupado por otro proyecto. `dev/seed-bot.sh` de korus_chat emite
-  una nueva cada vez; se pasa por `SITE_KEY=...`.
-- **Un `401 unauthorized` del gateway llega sin cabeceras CORS** (solo las
-  pone si la site key resuelve), así que desde el navegador se ve igual que
-  `forbidden_origin`. El widget muestra lo mismo en ambos casos y deja la
-  pista en consola. Anotado para back por si quiere hacerlo legible.
+- **Los e2e corren en `:5177`/`:5178`, no en el puerto del dev server
+  (`:5175`)**, para poder correrlos con `npm run dev` abierto. Necesitan site
+  keys con `http://localhost:5177` (ver README). `dev/seed-bot.sh` de
+  korus_chat emite una nueva cada vez; se pasan por `SITE_KEY` y
+  `DEMO_SITE_KEY`.
+- **korus_chat cachea las site keys 60 s.** Tras sembrar una, el preflight
+  CORS no conoce el origen hasta un minuto después: el widget lo ve como
+  `forbidden_origin`. No es un bug: esperar.
+- Los rechazos del gateway (401/403/429) ya llevan CORS si el `Origin` está
+  registrado en alguna site key (back lo añadió el 2026-09-15), así que
+  `unauthorized` se lee. Un origen que no está en ninguna sigue tapado por el
+  navegador y cae en la sonda a `/health`.
 - **Playwright atraviesa el Shadow DOM** con los locators normales; no hace
   falta `>>>`.
 - **`options` es una propiedad, no un atributo**: `el.options = {...}` antes de

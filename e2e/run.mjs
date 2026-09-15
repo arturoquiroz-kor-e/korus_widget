@@ -3,16 +3,16 @@ import { mkdirSync } from 'node:fs'
 import { serve } from './server.mjs'
 
 const ROOT = new URL('..', import.meta.url).pathname
-const SITE_KEY = process.env.SITE_KEY || 'kor_site_-Uu80WM5BSQi-N7EY0Mppw'   // orígenes: localhost:5175 y :8084
-const HOST = 'http://localhost:5175'
+const SITE_KEY = process.env.SITE_KEY || 'kor_site_EvaGNzjQze0BLF8Dd1PkGA'   // orígenes: localhost:5177 y :8084
+const HOST = 'http://localhost:5177'
 const OUT = ROOT + 'e2e/screens'
 mkdirSync(OUT, { recursive: true })
 
 let failed = 0
 const check = (n, ok, x = '') => { if (!ok) failed++; console.log(`${ok ? '✓' : '✗'} ${n}${x ? ' — ' + x : ''}`) }
 
-const s1 = await serve(5175, ROOT)
-const s2 = await serve(5176, ROOT)   // origen NO registrado
+const s1 = await serve(5177, ROOT)
+const s2 = await serve(5178, ROOT)   // origen NO registrado
 const browser = await chromium.launch({ channel: 'chrome', headless: true })
 const page = await browser.newPage({ viewport: { width: 1100, height: 800 } })
 const errors = []
@@ -98,7 +98,7 @@ const calls = await page.evaluate(() => window.__tokenCalls)
 check('getToken invocado en cada llamada (GET, end, start, turno, reintento)', calls === 5, String(calls))
 
 // --- 8. Origen no registrado → fatal, sin reintentos ---
-await page.goto(`http://localhost:5176/host.html?siteKey=${SITE_KEY}&open=1`)
+await page.goto(`http://localhost:5178/host.html?siteKey=${SITE_KEY}&open=1`)
 await w('.fatal').waitFor()
 check('origen ajeno → "no disponible" y sin entrada', (await w('.fatal-text').innerText()).includes('no está disponible') && (await w('.input').count()) === 0)
 check('evento error con código', await page.evaluate(() => window.__events.some(e => e.type === 'error' && e.detail?.code === 'forbidden_origin')))
