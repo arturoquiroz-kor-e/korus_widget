@@ -28,7 +28,7 @@ export const TEXTS = {
   send: 'Enviar',
   prev: 'Anterior',
   next: 'Siguiente',
-  page: (current, total) => total ? `Página ${current} de ${total}` : `Página ${current}`,
+  page: (current, totalPages) => totalPages ? `Página ${current} de ${totalPages}` : (current ? `Página ${current}` : ''),
   ended: 'La conversación terminó.',
   expired: 'La conversación expiró por inactividad.',
   restored: 'Conversación restaurada.',

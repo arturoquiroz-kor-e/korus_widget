@@ -17,5 +17,13 @@ export function serve(port, root) {
       res.writeHead(404); res.end('not found')
     }
   })
-  return new Promise(resolve => server.listen(port, () => resolve(server)))
+  // Si el puerto ya está ocupado (p. ej. un servidor de pruebas manual con el
+  // mismo root), se reutiliza: devolvemos un objeto con close() inerte.
+  return new Promise(resolve => {
+    server.once('error', err => {
+      if (err.code === 'EADDRINUSE') resolve({ close() {}, reused: true })
+      else throw err
+    })
+    server.listen(port, () => resolve(server))
+  })
 }

@@ -62,7 +62,7 @@
             </div>
             <div v-if="prompt.type === 'list' && prompt.page" class="pager">
               <button type="button" class="link" :disabled="busy || !prompt.page.hasPrev" @click="sendPage('prev')">‹ {{ T.prev }}</button>
-              <span class="pager-info">{{ T.page(prompt.page.current, prompt.page.total) }}</span>
+              <span class="pager-info">{{ T.page(prompt.page.current, prompt.page.totalPages) }}</span>
               <button type="button" class="link" :disabled="busy || !prompt.page.hasNext" @click="sendPage('next')">{{ T.next }} ›</button>
             </div>
           </template>
